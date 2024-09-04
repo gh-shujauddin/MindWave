@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    implementation("com.github.ybq:Android-SpinKit:1.4.0")
+    implementation ("com.github.ybq:Android-SpinKit:1.4.0")
 
 
 
