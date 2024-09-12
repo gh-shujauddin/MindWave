@@ -1,5 +1,6 @@
 package com.qadri81.mindwave
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,5 +30,22 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.loginUser(userRequest)
         }
+    }
+
+    fun validateCredentials(
+        username: String,
+        email: String,
+        password: String,
+        isLogin: Boolean
+    ): Pair<Boolean, String> {
+        var result = Pair(true, "")
+        if ((!isLogin && username.isEmpty()) || email.isEmpty() || password.isEmpty()) {
+            result = Pair(false, "Please provide the credentials")
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            result = Pair(false, "Please provide valid email")
+        } else if (password.length <= 5) {
+            result = Pair(false, "Password length should be greater than 5")
+        }
+        return result
     }
 }

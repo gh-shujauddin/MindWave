@@ -32,12 +32,17 @@ class UserRepository @Inject constructor(
     }
 
     private fun handleResponse(response: Response<UserResponse>) {
-        if (response.isSuccessful && response.body() != null) {
-            _userResponseLivedata.postValue(NetworkResult.Success(response.body()!!))
-        } else if (response.errorBody() != null) {
-            val errorBody = JSONObject(response.errorBody()!!.charStream().readText())
-            _userResponseLivedata.postValue(NetworkResult.Error(errorBody.getString("message")))
-        } else {
+        try {
+            if (response.isSuccessful && response.body() != null) {
+                _userResponseLivedata.postValue(NetworkResult.Success(response.body()!!))
+            } else if (response.errorBody() != null) {
+                val errorBody = JSONObject(response.errorBody()!!.charStream().readText())
+                _userResponseLivedata.postValue(NetworkResult.Error(errorBody.getString("message")))
+            } else {
+                _userResponseLivedata.postValue(NetworkResult.Error("Something went wrong"))
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
             _userResponseLivedata.postValue(NetworkResult.Error("Something went wrong"))
         }
     }
