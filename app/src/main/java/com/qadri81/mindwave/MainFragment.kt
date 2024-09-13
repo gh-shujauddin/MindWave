@@ -1,7 +1,6 @@
 package com.qadri81.mindwave
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,16 +9,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.qadri81.mindwave.api.NoteApi
+import com.google.gson.Gson
 import com.qadri81.mindwave.databinding.FragmentMainBinding
-import com.qadri81.mindwave.util.Constants.TAG
+import com.qadri81.mindwave.models.NoteResponse
 import com.qadri81.mindwave.util.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -36,7 +32,7 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding
             .inflate(inflater, container, false)
-        adapter = NoteAdapter()
+        adapter = NoteAdapter(::onNoteClick)
         return binding.root
     }
 
@@ -47,6 +43,9 @@ class MainFragment : Fragment() {
         binding.noteList.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.noteList.adapter = adapter
+        binding.addNote.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_noteFragment)
+        }
 
     }
 
@@ -68,6 +67,12 @@ class MainFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun onNoteClick(noteResponse: NoteResponse) {
+        val bundle = Bundle()
+        bundle.putString("note", Gson().toJson(noteResponse))
+        findNavController().navigate(R.id.action_mainFragment_to_noteFragment, bundle)
     }
 
     override fun onDestroyView() {

@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qadri81.mindwave.databinding.NoteItemBinding
 import com.qadri81.mindwave.models.NoteResponse
 
-class NoteAdapter() : ListAdapter<NoteResponse, NoteAdapter.NoteViewHolder>(ComparatorDiffUtil()) {
+class NoteAdapter(private val onNoteClick: (NoteResponse) -> Unit) :
+    ListAdapter<NoteResponse, NoteAdapter.NoteViewHolder>(ComparatorDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,6 +29,9 @@ class NoteAdapter() : ListAdapter<NoteResponse, NoteAdapter.NoteViewHolder>(Comp
         fun bind(note: NoteResponse) {
             binding.title.text = note.title
             binding.desc.text = note.description
+            binding.root.setOnClickListener {
+                onNoteClick(note)
+            }
         }
     }
 

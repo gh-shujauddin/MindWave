@@ -17,4 +17,10 @@
     <string name="log_in">Login</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="notes">Notes</string>
+    <string name="submit">Submit</string>
+    <string name="description_hint">Enter your description</string>
+    <string name="description">Description</string>
+    <string name="title_hint">Write your title</string>
+    <string name="title">Title</string>
+    <string name="edit_note">Edit Note</string>
 </resources>
